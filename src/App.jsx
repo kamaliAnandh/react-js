@@ -1,29 +1,33 @@
-
-import { useState } from 'react';
-import './App.css'
+import { useState } from 'react'
 
 function App() {
- 
-  const [count ,setCount] = useState(0)
-  const increment = ()=>{
-    setCount(count + 1);
-  }
-  const decrement = ()=>{
-    setCount(count - 1);
+  const [ task,setTask] = useState("");
+  const [todos,setTodos] = useState([]);
+  const addtodo=()=>{
+    const trimmed = task.trim();
+    if(!trimmed) return;
+    setTodos((prev)=>[...prev,{id:crypto.randomUUID(),text:trimmed}]);
+    setTask("");
   };
-  const reset = ()=>{
-    setCount(0)
+  const deletetodo = (id)=>{
+    setTodos((prev)=>prev.filter((t)=>t.id !== id));
   }
-    return(
+    return (
       <>
-      <h1>{count}</h1>
-      <button onClick={increment}>Increment</button>
-      <button onClick={decrement}>Decrement</button>
-      <button onClick={reset}>Reset</button>
+      <h1>Todo List</h1>
+      <input type="text" value={task} onChange={(e)=>setTask(e.target.value)} placeholder='Type a task' />
+      <button onClick={addtodo}>Add</button>
+      <ul>
+        {
+          todos.map((t)=> (
+            <li key={t.id}>{t.text}
+            <button onClick={()=>deletetodo(t.id)}>Delete</button>
+            </li>
+          ))
+        }
+      </ul>
       </>
     );
-
-  
 }
 
 export default App
