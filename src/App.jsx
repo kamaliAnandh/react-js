@@ -1,33 +1,48 @@
-import { useState } from 'react'
+import { useState } from 'react';
+
+import './App.css';
 
 function App() {
-  const [ task,setTask] = useState("");
-  const [todos,setTodos] = useState([]);
-  const addtodo=()=>{
-    const trimmed = task.trim();
-    if(!trimmed) return;
-    setTodos((prev)=>[...prev,{id:crypto.randomUUID(),text:trimmed}]);
-    setTask("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [submittedData, setSubmittedData] = useState(null);
+
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    const data = {name,email,password};
+    setSubmittedData(data);
+    setName("");
+    setEmail("");
+    setPassword("");
   };
-  const deletetodo = (id)=>{
-    setTodos((prev)=>prev.filter((t)=>t.id !== id));
-  }
-    return (
-      <>
-      <h1>Todo List</h1>
-      <input type="text" value={task} onChange={(e)=>setTask(e.target.value)} placeholder='Type a task' />
-      <button onClick={addtodo}>Add</button>
-      <ul>
-        {
-          todos.map((t)=> (
-            <li key={t.id}>{t.text}
-            <button onClick={()=>deletetodo(t.id)}>Delete</button>
-            </li>
-          ))
-        }
-      </ul>
-      </>
-    );
+  return (
+    <>
+    <div className="card">
+      <h1>Registration Form</h1>
+      <form onSubmit={handleSubmit}>
+        <label>Name:</label>
+        <input type="text" className="input-box" value={name} onChange={(e)=>setName(e.target.value)} required/>
+        <label>Email:</label>
+        <input type="email" className="input-box" value={email} onChange={(e)=>setEmail(e.target.value)} required/>
+        <label>Password:</label>
+        <input type="password" className="input-box" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
+        <button type="submit" className="btn">Submit</button>
+      </form>
+      {submittedData && (
+        <div className="output-card">
+          <h2>Submitted data</h2>
+          <p><strong>Name:</strong>{submittedData.name}</p>
+          <p><strong>Email:</strong>{submittedData.email}</p>
+          <p><strong>Password:</strong>{submittedData.password}</p>
+
+        </div>
+      )}
+    </div>
+   
+    </>
+  );
 }
 
 export default App
